@@ -1,0 +1,23 @@
+{
+  "name": "tetrjs",
+  "version": "1.0.0",
+  "description": "Multiplayer Tetris",
+  "main": "main.js",
+  "scripts": {
+    "test": "nodemon main.js & node_modules/.bin/watchify src/client/js/main.js -o public/js/tetrjs.js"
+  },
+  "author": "Junior",
+  "license": "ISC",
+  "dependencies": {
+    "browserify": "^13.1.0",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.14.0",
+    "express-session": "^1.14.1",
+    "mongoose": "^4.6.7",
+    "socket.io": "^1.5.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0",
+    "watchify": "^3.7.0"
+  }
+}
