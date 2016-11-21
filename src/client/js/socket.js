@@ -1,2 +1,2 @@
-var socket = io('//localhost:8080');
+var socket = io(window.location.hostname);
 module.exports = socket;
