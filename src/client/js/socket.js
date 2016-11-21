@@ -1,2 +1,2 @@
-var socket = io(window.location.hostname);
+var socket = io(window.location.host);
 module.exports = socket;

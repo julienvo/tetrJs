@@ -40,7 +40,9 @@ Instance.prototype.init = function(){
   if(this.state != states.PLAYING){
     this.playField = new PlayField();
     this.playField.init();
-    this.message.innerHTML = 'Press Space when you are ready.';
+    if(this.message){
+      this.message.innerHTML = 'Press Space when you are ready.';   
+    }
     //this.piece = new Piece(4, 0);
     this.score = 0;
     this.actions = [];
@@ -201,8 +203,10 @@ Instance.prototype.run = function(){
 
 Instance.prototype.getReady = function(){
   this.state = states.READY;
-  this.message.style.display = '';
-  this.message.innerHTML = 'Waiting for opponents';
+  if(this.message){
+    this.message.style.display = '';
+    this.message.innerHTML = 'Waiting for opponents';
+  }
   socket.emit('playerReady');
 };
 
