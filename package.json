@@ -7,7 +7,7 @@
     "build": "browserify src/client/js/main.js -o public/js/tetrjs.js",
     "postinstall": "npm run build",
     "start": "node main.js",
-    "test": "nodemon main.js & node_modules/.bin/watchify src/client/js/main.js -o public/js/tetrjs.js"
+    "test": "nodemon main.js"
   },
   "author": "Junior",
   "license": "ISC",
