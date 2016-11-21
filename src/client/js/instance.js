@@ -27,6 +27,7 @@ var Instance = function(element, id){
     this.id = id;
   }
   this.canvas = new Canvas(element.querySelector('.maingame'));
+  this.nick = element.querySelector('.nick');
   this.message = element.querySelector('.message');
   this.playField = null;
   this.piece = null;
@@ -47,6 +48,10 @@ Instance.prototype.init = function(){
     this.score = 0;
     this.actions = [];
   }
+};
+
+Instance.prototype.setName = function(name){
+  this.nick.innerHTML = name;
 };
 
 Instance.prototype.reset = function(){

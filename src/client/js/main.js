@@ -18,6 +18,7 @@ socket.on('newPlayer', function(data){
   //console.log(data);
   if(nbOpponents == 0){
     instances[1] = new Instance(document.querySelector('#other'),data.id);
+    instances[1].setName(data.name);
     instances[1].init();
     nbOpponents++;
   }
@@ -27,14 +28,18 @@ socket.on('nameChanged', function(data){
   if(!data.name){
     lobby.error(data.msg);
   }
+  else{
+    instances[0].setName(data.name);
+  }
 });
 
 socket.on('playerList', function(data){
   console.log('playerList');
   for(let i of data.list){
     console.log('push');
-    let newInstance = new Instance(document.querySelector('#other'), i);
+    let newInstance = new Instance(document.querySelector('#other'), i.id);
     newInstance.init();
+    newInstance.setName(i.name)
     instances.push(newInstance);
   }
 });
@@ -74,14 +79,14 @@ socket.on('iPityTheFool', function(data){
 });
 
 socket.on('weHaveAWinner', function(data){
-  console.log(data.winner + ' gagne la partie !');
+  gameZone.setMessage(data.winner.nick + ' wins ! Press Space to restart.');
   instances[0].endGame();
   
-  for (let player of instances){
+/*  for (let player of instances){
     if(player.id == data.winner){
       console.log(player.id + ' gagne la partie !');
     }
-  }
+  }*/
 });
 
 gameZone.hide();

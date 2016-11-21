@@ -103,7 +103,7 @@ var joinRoom = function(data){
       sendPlayerList(this, roomName);
       this.join(roomName);
       players[this.id].room = roomName;
-      this.broadcast.to(players[this.id].room).emit('newPlayer', {id:this.id});
+      this.broadcast.to(players[this.id].room).emit('newPlayer', {id:this.id, name: players[this.id].nick});
       //this.emit('playerList', {list: io.nsps['/'].adapter.rooms[players[this.id].room].sockets.keys()});
       this.emit('roomJoined', {room: roomName});
     }
@@ -138,7 +138,11 @@ var sendPlayerList = function(socket, roomName) {
   let room = io.nsps['/'].adapter.rooms[roomName];
   //console.log(room);
   if(room){
-    socket.emit('playerList', {list: Object.keys(room.sockets)});
+    let list = [];
+    for(let id of Object.keys(room.sockets)){
+      list.push({id:id, name:players[id].nick});
+    }
+    socket.emit('playerList', {list: list});
   }
 };
 
@@ -165,7 +169,7 @@ var gameOver = function(data){
       //console.log(players[player].ready);
       players[player].ready = false;
     }
-    io.sockets.in(players[this.id].room).emit('weHaveAWinner', {winner: stillAliveList[0]});
+    io.sockets.in(players[this.id].room).emit('weHaveAWinner', {winner: {id: stillAliveList[0], nick: players[stillAliveList[0]].nick}});
   }
 };
 

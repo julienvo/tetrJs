@@ -2,6 +2,7 @@ var gamezone = {
   container: document.querySelector('#gameContainer'),
   localPlayer: document.querySelector('#main'),
   otherPlayers: document.querySelector('#other'),
+  message: document.querySelector('#gameContainer>.message'),
 
   hide: function(){
     this.container.style.display = 'none';
@@ -9,6 +10,10 @@ var gamezone = {
 
   show: function(){
     this.container.style.display = '';
+  },
+
+  setMessage: function(message){
+    this.message.innerHTML = message;
   }
 
 };
