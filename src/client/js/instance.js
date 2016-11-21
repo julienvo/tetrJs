@@ -29,11 +29,13 @@ var Instance = function(element, id){
   this.canvas = new Canvas(element.querySelector('.maingame'));
   this.nick = element.querySelector('.nick');
   this.message = element.querySelector('.message');
+  this.scoreDisplay = element.querySelector('.score');
   this.playField = null;
   this.piece = null;
   this.score = 0;
   this.state = states.WAITING;
   this.actions = [];
+  this.goal = null;
 };
 
 Instance.prototype.init = function(){
@@ -70,7 +72,7 @@ Instance.prototype.update = function(time){
       socket.emit('blockMoved', {piece: this.piece});
       if(this.checkCollision()){
         let nbDeletedLines = this.playField.addPiece(this.piece);
-        this.sendPunishment(nbDeletedLines);
+        this.linesCompleted(nbDeletedLines);
         socket.emit('newGrid', {grid: this.playField.grid});
         this.newPiece();
       }
@@ -87,7 +89,6 @@ Instance.prototype.checkCollision = function(){
       let currentBlockY = parseInt(col) + this.piece.y;
       let currentBlockColor = this.piece.shape[col][row];
 
-     
       if( currentBlockColor !=0 ){
         if(currentBlockX < 0 || currentBlockX >= this.playField.nbCols || currentBlockY < 0 || currentBlockY >= this.playField.nbRows){
            return true; // Hors limites
@@ -127,7 +128,7 @@ Instance.prototype.moveDown = function(){
   this.piece.y++;
   if(this.checkCollision()){
     let nbDeletedLines = this.playField.addPiece(this.piece);
-    this.sendPunishment(nbDeletedLines);
+    this.linesCompleted(nbDeletedLines);
     socket.emit('newGrid', {grid: this.playField.grid});
     this.newPiece();
   }
@@ -142,7 +143,7 @@ Instance.prototype.drop = function(){
     this.piece.y++;
   }
   let nbDeletedLines = this.playField.addPiece(this.piece);
-  this.sendPunishment(nbDeletedLines);
+  this.linesCompleted(nbDeletedLines);
   socket.emit('newGrid', {grid: this.playField.grid});
   this.newPiece();
 }
@@ -159,12 +160,9 @@ Instance.prototype.rotate = function(sens){
 };
 
 // Si un joueur efface 2, 3 ou 4 lignes d'un coup, il envoie respectivement 1, 2 ou 4 lignes incomplètes à son adversaire
-Instance.prototype.sendPunishment = function(nbLines){
-  if(nbLines != 4){
-    nbLines--;
-  }
-  console.log('punishment ! ' + nbLines);
-  socket.emit('punishment', {nbLignes: nbLines});
+Instance.prototype.linesCompleted = function(nbLines){
+  this.setScore(this.score += nbLines);
+  socket.emit('linesWereCompleted', {nbLignes: nbLines});
 };
 
 Instance.prototype.draw = function(){
@@ -224,12 +222,18 @@ Instance.prototype.getReady = function(){
 
 Instance.prototype.gameOver = function(){
   this.state = states.GAME_OVER;
-  document.querySelector('#main .score').innerHTML = 'Game Over :(';
+  this.scoreDisplay.innerHTML = 'Game Over :(';
   socket.emit('gameOver');
 };
 
 Instance.prototype.endGame = function(){
   this.state = states.WAITING;
+}
+
+
+Instance.prototype.setScore = function(score){
+  this.score = score;
+  this.scoreDisplay.innerHTML = this.goal - this.score;
 }
 
 Instance.prototype.handle = function(keyCode){

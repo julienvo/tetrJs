@@ -23,12 +23,14 @@ app.get('/', function (req, res) {
 });
 
 
+const MAX_PLAYERS_BY_ROOM = 2;
+
+// nombres de lignes nécessaires pour gagner
+const LINES_TO_WIN = 4;
+
 /**********************
       SOCKET.IO
 **********************/
-
-const MAX_PLAYERS_BY_ROOM = 2;
-
 
 var players = {};
 var listeRooms = [];
@@ -51,7 +53,7 @@ io.on('connection', function (socket) {
   socket.on('playerReady', getReady);
   socket.on('newGrid', sendGrid);
   socket.on('blockMoved', sendBlockPosition);
-  socket.on('punishment', sendPunishment);
+  socket.on('linesWereCompleted', sendPunishment);
   socket.on('gameOver', gameOver);
   socket.on('disconnect', removePlayer);
   socket.on('leaveRoom', leaveRoom);
@@ -113,12 +115,19 @@ var joinRoom = function(data){
 
 var getReady = function(){
   players[this.id].ready = true;
+  players[this.id].score = 0;
   let currentRoom = players[this.id].room;
   //console.log(this.id + ' is ready');
-  // Si il y a plus d'un joueur dans la room et que tout le monde est prêt, on lance
+  // Si il y a plus d'un joueur dans la room et que tout le monde est prêt, on lance la partie
   if(io.nsps['/'].adapter.rooms[currentRoom].length > 1 && checkReady(currentRoom)){
     //console.log(checkReady(currentRoom));
-    io.sockets.in(currentRoom).emit('go');
+    // Avant de lancer, on remet la variable 'gameOver' de chaque joueur à 'false'
+    for(let player of Object.keys(io.nsps['/'].adapter.rooms[currentRoom].sockets)){
+      //console.log(players[player].ready);
+      players[player].gameOver = false;
+    }
+
+    io.sockets.in(currentRoom).emit('go', {goal: LINES_TO_WIN});
   }
 };
 
@@ -154,8 +163,19 @@ var sendBlockPosition = function(data){
   this.broadcast.to(players[this.id].room).emit('enemyMoved', {piece: data.piece, id:this.id});
 };
 
+// Quand un joueur efface 2,3, ou 4 lignes, on ajoute respectivement 1, 2 ou 4 lignes incomplètes aux adversaires
 var sendPunishment = function(data){
-  this.broadcast.to(players[this.id].room).emit('iPityTheFool', {nbLignes: data.nbLignes});
+  players[this.id].score += data.nbLignes;
+  console.log(players[this.id].nick + ' : ' + players[this.id].score);
+  if (data.nbLignes <= 4){ // Anti-triche :o
+    if(data.nbLignes != 4){
+      data.nbLignes--;
+    }
+    this.broadcast.to(players[this.id].room).emit('iPityTheFool', {nbLignes: data.nbLignes, score: players[this.id].score});
+  }
+  if(players[this.id].score >= LINES_TO_WIN){
+    io.sockets.in(players[this.id].room).emit('weHaveAWinner', {winner: {id: this.id, nick: players[this.id].nick}});
+  }
 };
 
 // Prend en note quand un joueur a perdu, et si tout le monde a perdu sauf un joueur,
@@ -195,10 +215,11 @@ var removePlayer = function(data){
   //console.log('Player '+ this.id + 'quit, current players connected : ' + JSON.stringify(players));
 };
 
+// Renvoie la liste des joueurs n'ayant pas encore perdu
 var stillAlive = function(room){
   let stillAliveList = [];
   Object.keys(io.nsps['/'].adapter.rooms[room].sockets).forEach(function(element){
-    if(players[element].gameOver){
+    if(!players[element].gameOver){
       stillAliveList.push(element);
     }
   });

@@ -4,6 +4,7 @@ var lobby = {
   lobby: document.querySelector('#lobby'),
   roomList: document.querySelector('#roomList'),
   errorMessage: document.querySelector('#errorMessage'),
+  name: document.querySelector('#nameDiv'),
 
   hide: function(){
     this.lobby.style.display = 'none';
@@ -54,7 +55,12 @@ var lobby = {
   },
 
   error: function(message){
-    errorMessage.innerHTML = message;
+    this.errorMessage.innerHTML = message;
+  },
+
+  setName: function(name){
+    console.log(this.name, name);
+    this.name.innerHTML = 'Nickname: ' + name;
   }
 };
 
