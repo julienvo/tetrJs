@@ -1,3 +1,4 @@
+var socket = require('./socket');
 /* Playfield constructor */
 
 var PlayField = function(){
@@ -54,8 +55,22 @@ PlayField.prototype.checkLines = function(){
     }
   }
   return nbRowsDeleted;
-}
+};
 
+// Ajoute des lignes incomplètes en bas du tableau
+PlayField.prototype.addRowsToBottom = function(nbLignes){
+  if(nbLignes <= 4 && nbLignes > 0){ // Pour éviter la triche, on sait jamais
+    for(let i = 0; i < nbLignes; i++){
+      let array = new Array(this.nbCols).fill(8);
+      array[Math.floor(Math.random() * this.nbCols)] = 0;
+      this.grid.push(array);
+    }
+    this.grid.splice(0,nbLignes);
+    socket.emit('newGrid', {grid: this.grid});
+  }
+};
+
+// Affiche le tableau de jeu dans la console - pour le debug
 PlayField.prototype.print = function () {
     if ( console.clear && 0 ) {
       console.clear();
@@ -67,4 +82,5 @@ PlayField.prototype.print = function () {
       console.log(this.grid[i].join(' '));
     }
 };
+
 module.exports = PlayField;

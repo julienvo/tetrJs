@@ -4,6 +4,9 @@
   "description": "Multiplayer Tetris",
   "main": "main.js",
   "scripts": {
+    "build": "browserify src/client/js/main.js -o public/js/tetrjs.js",
+    "postinstall": "npm run build",
+    "start": "node main.js",
     "test": "nodemon main.js & node_modules/.bin/watchify src/client/js/main.js -o public/js/tetrjs.js"
   },
   "author": "Junior",
@@ -19,5 +22,8 @@
   "devDependencies": {
     "nodemon": "^1.11.0",
     "watchify": "^3.7.0"
+  },
+  "engines": {
+    "node": "6.5.0"
   }
 }

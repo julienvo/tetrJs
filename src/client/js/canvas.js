@@ -1,18 +1,16 @@
-var canvas = document.getElementById('maingame');
-var ctx = canvas.getContext('2d');
-var height = 400;
-var width = 200;
+var Canvas = function(element){
+  this.height = 400;
+  this.width = 200;
 
-canvas.height = height;
-canvas.width = width;
-ctx.strokeStyle = 'white';
+  this.canvas = element;
+  this.canvas.height = this.height;
+  this.canvas.width = this.width;
+  
+  this.ctx = this.canvas.getContext('2d');
+  this.ctx.strokeStyle = 'white';
 
-module.exports = {
-  clear: function() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-  },
-  ctx: ctx,
-  width: width,
-  height: height,
-  el: canvas
+  this.blockSize = this.width/10;
+
 };
+
+module.exports = Canvas;

@@ -6,6 +6,23 @@ body {
   text-align: center;
 }
 
-canvas {
+#gameContainer>div{
+  float: left;
+}
+
+#main canvas {
   border: solid .2em #fff;
+}
+
+#other canvas {
+  border: solid .2em #aaa;
+}
+
+
+#lobby ul{
+  list-style: none;
+}
+
+#instructions{
+  font-size: 0.4em;
 }

@@ -6,8 +6,30 @@
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-  <div id="score">Score</div>
-  <canvas id="maingame"></canvas>
+<div id="lobby">
+  <button id="refresh">Actualiser</button>
+  Liste des parties en cours : 
+  <div>
+    <ul id="roomList">
+    </ul>
+  </div>
+  <button id="creerPartie">Créer une partie</button>
+  <div id="errorMessage"></div>
+
+</div>
+<div id="gameContainer">
+  <div id="main">
+    <div>Score : <span class="score"></span></div>
+    <canvas class="maingame"></canvas>
+    <div class="message"></div>
+  </div>
+  <div id="other">
+    <div>Score : <span class="score"></span></div>
+    <canvas class="maingame"></canvas>
+  </div>
+  <div id='instructions'>Use left and right arrows to move the block, W and X to rotate, down arrow to make the block fall faster and up arrow to drop the block.</div>
+</div>
 </body>
+<script src="/socket.io/socket.io.js"></script>
 <script src="/js/tetrjs.js"></script>
 </html>
