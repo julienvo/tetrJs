@@ -39,7 +39,7 @@ var Instance = function(element, id){
 };
 
 Instance.prototype.init = function(){
-  console.log(this.state);
+  //console.log(this.state);
   if(this.state != states.PLAYING){
     this.playField = new PlayField();
     this.playField.init();
@@ -203,7 +203,7 @@ Instance.prototype.draw = function(){
 
 
 Instance.prototype.run = function(){
-  console.log('run');
+  //console.log('run');
   this.state = states.PLAYING;
   this.newPiece();
   this.message.style.display = 'none';

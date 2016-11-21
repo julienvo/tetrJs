@@ -10,7 +10,7 @@ socket.emit('getRoomList');
 
 // Récupération de la liste des rooms
 socket.on('rooms', function(data){
-  console.log('rooms: ' + JSON.stringify(data));
+  //console.log('rooms: ' + JSON.stringify(data));
   lobby.populate(data.rooms);
 });
 
@@ -40,9 +40,9 @@ socket.on('nameChanged', function(data){
 
 // Récupère la liste des autres joueurs déja présents dans la room
 socket.on('playerList', function(data){
-  console.log('playerList');
+  //console.log('playerList');
   for(let i of data.list){
-    console.log('push');
+    //console.log('push');
     let newInstance = new Instance(document.querySelector('#other'), i.id);
     newInstance.init();
     newInstance.setName(i.name)
@@ -64,7 +64,7 @@ socket.on('enemyLaidAPiece', function(data){
 
 // Lancement de la partie
 socket.on('go', function(data){
-  console.log('GOGOGO');
+  //console.log('GOGOGO');
   for(let instance of instances){
     instance.goal = data.goal;  
     instance.setScore(0);
@@ -75,7 +75,7 @@ socket.on('go', function(data){
 
 // Réponse du serveur lors d'un essai de rejoindre ou créer une room
 socket.on('roomJoined', function(data){
-  console.log('roomJoined');
+  //console.log('roomJoined');
   if(!data.room){
     lobby.error(data.message);
   }
@@ -83,8 +83,8 @@ socket.on('roomJoined', function(data){
     lobby.hide();
     gameZone.show();
   }
-  console.log(data);
-})
+  //console.log(data);
+});
 
 // Quand un adversaire fait disparaitre une ou plusieurs lignes
 socket.on('iPityTheFool', function(data){
@@ -99,7 +99,7 @@ socket.on('weHaveAWinner', function(data){
   
 /*  for (let player of instances){
     if(player.id == data.winner){
-      console.log(player.id + ' gagne la partie !');
+      //console.log(player.id + ' gagne la partie !');
     }
   }*/
 });
@@ -120,12 +120,12 @@ window.document.querySelector('#nameDiv>form').onsubmit = function(event){
 };
 
 window.document.querySelector('#creerPartie').onclick = function(){
-  console.log('joinRoom');
+  //console.log('joinRoom');
   socket.emit('joinRoom', {room:null});
 };
 
 window.document.querySelector('#refresh').onclick = function(){
-  console.log('refreshRooms');
+  //console.log('refreshRooms');
   socket.emit('getRoomList');
 };
 

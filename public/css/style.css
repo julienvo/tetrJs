@@ -1,17 +1,72 @@
 body {
+  margin: 0;
   background: #202028;
-  color: #fff;
+  color: #ededef;
   font-family: sans-serif;
-  font-size: 2em;
   text-align: center;
 }
 
-#gameContainer>div{
-  float: left;
+#title{
+  font-size: 3em;
+  border-bottom: solid .2em #fff;
+  margin: 10px 0;
+}
+
+#lobby div{
+  margin: 10px 0;
+}
+
+#roomList{
+  width: 400px;
+  margin: auto;
+}
+
+#roomList li{
+  min-height: 30px;
+  position: relative;
+}
+
+#roomList li:nth-child(odd){
+  color: #202028;
+  background: #ededef;
+}
+
+#roomList span{
+  position: absolute;
+  left: 10px;
+  top:3px;
+}
+
+#roomList button{
+  position: absolute;
+  right: 10px;
+  top:3px;
+}
+
+#gameZone>div{
+  margin: 30px auto;
+}
+
+#gameZone>.message{
+  font-size: 2em;
+}
+
+#instances>div{
+  margin: auto 10px;
+  display: inline-block;
+  vertical-align: top;
 }
 
 #main canvas {
   border: solid .2em #fff;
+}
+
+#main .message{
+  font-size: 1.3em;
+}
+
+.nick {
+  font-size: 2em;
 }
 
 #other canvas {
@@ -20,9 +75,10 @@ body {
 
 
 #lobby ul{
+  padding: 0;
   list-style: none;
 }
 
-#instructions{
-  font-size: 0.4em;
+#errorMessage{
+  color: #ff7676;
 }

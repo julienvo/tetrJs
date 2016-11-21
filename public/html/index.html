@@ -6,36 +6,40 @@
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-<div id="lobby">
-  <div id="nameDiv">
-    <form action="">
-      <label for="nameForm">Nickname : </label><input id="name" autocomplete="off" placeholder="Enter your name here..."/><button>Send</button>
-    </form> 
-  </div>
-  <button id="refresh">Actualiser</button>
-  Liste des parties en cours : 
-  <div>
-    <ul id="roomList">
-    </ul>
-  </div>
-  <button id="creerPartie">Créer une partie</button>
-  <div id="errorMessage"></div>
-
-</div>
+<div id='title'>TetrJS</div>
 <div id="gameContainer">
-  <div id="main">
-    <div class="nick"></div>
-    <canvas class="maingame"></canvas>
-    <div>Remaining lines : <span class="score"></span></div>
+  <div id="lobby">
+    <div id="nameDiv">
+      <form action="">
+        <label for="nameForm">Nickname : </label><input id="name" autocomplete="off" placeholder="Enter your name here..."/><button>Send</button>
+      </form> 
+    </div>
+    <button id="refresh">Actualiser</button>
+    Liste des parties en cours : 
+    <div>
+      <ul id="roomList">
+      </ul>
+    </div>
+    <button id="creerPartie">Créer une partie</button>
+    <div id="errorMessage"></div>
+  </div>
+  <div id="gameZone">
+    <div id="instances">
+      <div id="main">
+        <div class="nick"></div>
+        <canvas class="maingame"></canvas>
+        <div>Remaining lines : <span class="score"></span></div>
+        <div class="message"></div>
+      </div>
+      <div id="other">
+        <div class="nick"></div>
+        <canvas class="maingame"></canvas>
+        <div>Remaining lines : <span class="score"></span></div>
+      </div>
+    </div>
     <div class="message"></div>
+    <div id='instructions'>Use left and right arrows to move the block, W and X to rotate, down arrow to make the block fall faster and up arrow to drop the block. First to 30 lines or last one standing wins.</div>
   </div>
-  <div id="other">
-    <div class="nick"></div>
-    <canvas class="maingame"></canvas>
-    <div>Remaining lines : <span class="score"></span></div>
-  </div>
-  <div class="message"></div>
-  <div id='instructions'>Use left and right arrows to move the block, W and X to rotate, down arrow to make the block fall faster and up arrow to drop the block.</div>
 </div>
 </body>
 <script src="/socket.io/socket.io.js"></script>

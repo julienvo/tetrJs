@@ -25,7 +25,7 @@ var lobby = {
   populate: function(roomList){
     this.clearList();
     this.clearError();
-    console.log(roomList);
+    //console.log(roomList);
     if(roomList.length > 0){
       for(room of roomList){
         this.addRoom(room);
@@ -43,9 +43,8 @@ var lobby = {
     roomName.innerHTML = room;
     li.appendChild(roomName);
 
-    let join = document.createElement('a');
+    let join = document.createElement('button');
     join.innerHTML = 'Rejoindre';
-    join.href = '#';
     join.onclick = function(){
       socket.emit('joinRoom', {room:room});
     };
@@ -59,7 +58,7 @@ var lobby = {
   },
 
   setName: function(name){
-    console.log(this.name, name);
+    //console.log(this.name, name);
     this.name.innerHTML = 'Nickname: ' + name;
   }
 };

@@ -4,6 +4,7 @@ var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var fs = require('fs');
 var path = require('path');
+var favicon = require('serve-favicon');
 var Player = require('./player');
 
 /******
@@ -15,7 +16,7 @@ var port = process.env.PORT || 8080;
 var session = require('express-session');
 var cookieParser = require('cookie-parser');
 
-
+app.use(favicon(__dirname + '/public/img/favicon.ico'));
 app.use(express.static(__dirname + '/public'));
 
 app.get('/', function (req, res) {
@@ -26,7 +27,7 @@ app.get('/', function (req, res) {
 const MAX_PLAYERS_BY_ROOM = 2;
 
 // nombres de lignes nécessaires pour gagner
-const LINES_TO_WIN = 4;
+const LINES_TO_WIN = 30;
 
 /**********************
       SOCKET.IO
@@ -67,7 +68,6 @@ var sendRoomList = function(){
 };
 
 var nameChange = function(data){
-  console.log(data);
   if(data.name != ''){
     for(let player of Object.keys(players)){
       //console.log(players[player].ready);
@@ -166,13 +166,14 @@ var sendBlockPosition = function(data){
 // Quand un joueur efface 2,3, ou 4 lignes, on ajoute respectivement 1, 2 ou 4 lignes incomplètes aux adversaires
 var sendPunishment = function(data){
   players[this.id].score += data.nbLignes;
-  console.log(players[this.id].nick + ' : ' + players[this.id].score);
+  //console.log(players[this.id].nick + ' : ' + players[this.id].score);
   if (data.nbLignes <= 4){ // Anti-triche :o
     if(data.nbLignes != 4){
       data.nbLignes--;
     }
     this.broadcast.to(players[this.id].room).emit('iPityTheFool', {nbLignes: data.nbLignes, score: players[this.id].score});
   }
+
   if(players[this.id].score >= LINES_TO_WIN){
     io.sockets.in(players[this.id].room).emit('weHaveAWinner', {winner: {id: this.id, nick: players[this.id].nick}});
   }
@@ -182,7 +183,7 @@ var sendPunishment = function(data){
 // prévient le joueur gagnant de sa victoire
 var gameOver = function(data){
   players[this.id].gameOver = true;
-  console.log(this.id + 'lost');
+  //console.log(this.id + 'lost');
   let stillAliveList = stillAlive(players[this.id].room);
   if(stillAlive.length == 1){
     for(let player of Object.keys(io.nsps['/'].adapter.rooms[players[this.id].room].sockets)){
