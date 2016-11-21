@@ -8,6 +8,7 @@ var PlayField = function(){
 };
 
 PlayField.prototype.init = function(h,w){
+  this.grid = [];
   this.nbCols = w || 10;
   this.nbRows = h || 20;
 

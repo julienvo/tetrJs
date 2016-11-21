@@ -49,11 +49,16 @@ Instance.prototype.init = function(){
   }
 };
 
+Instance.prototype.reset = function(){
+  this.playField.init();
+}
+
 let lastTime = 0;
 
 Instance.prototype.update = function(time){
+  let action = this.actions.shift();
   if(this.state == states.PLAYING){
-    this.handle(this.actions.shift());
+    this.handle(action);
     let elapsedTime = time - lastTime; 
     if(elapsedTime > 500){
       this.piece.y++;
@@ -202,12 +207,14 @@ Instance.prototype.run = function(){
 };
 
 Instance.prototype.getReady = function(){
-  this.state = states.READY;
-  if(this.message){
-    this.message.style.display = '';
-    this.message.innerHTML = 'Waiting for opponents';
+  if(this.state != states.PLAYING){
+    this.state = states.READY;
+    if(this.message){
+      this.message.style.display = '';
+      this.message.innerHTML = 'Waiting for opponents';
+    }
+    socket.emit('playerReady');  
   }
-  socket.emit('playerReady');
 };
 
 Instance.prototype.gameOver = function(){

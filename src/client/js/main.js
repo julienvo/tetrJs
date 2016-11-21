@@ -45,6 +45,9 @@ socket.on('enemyLaidAPiece', function(data){
 
 socket.on('go', function(){
   console.log('GOGOGO');
+  for(let instance of instances){
+    instance.playField.init();
+  }
   instances[0].run();
 });
 
@@ -65,7 +68,7 @@ socket.on('iPityTheFool', function(data){
 });
 
 socket.on('weHaveAWinner', function(data){
-      console.log(data.winner + ' gagne la partie !');
+  console.log(data.winner + ' gagne la partie !');
   instances[0].endGame();
   
   for (let player of instances){

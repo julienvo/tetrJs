@@ -146,6 +146,10 @@ var gameOver = function(data){
   console.log(this.id + 'lost');
   let stillAliveList = stillAlive(players[this.id].room);
   if(stillAlive.length == 1){
+    for(let player of Object.keys(io.nsps['/'].adapter.rooms[players[this.id].room].sockets)){
+      //console.log(players[player].ready);
+      players[player].ready = false;
+    }
     io.sockets.in(players[this.id].room).emit('weHaveAWinner', {winner: stillAliveList[0]});
   }
 };
