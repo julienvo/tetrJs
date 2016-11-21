@@ -46,7 +46,8 @@ io.on('connection', function (socket) {
   //console.log('Player '+ socket.id + 'joined, current players connected : ' + JSON.stringify(players));
   socket.on('getRoomList', sendRoomList);
   socket.on('newPlayer', createPlayer);
-  socket.on('joinRoom', joinRoom)
+  socket.on('nameChange', nameChange);
+  socket.on('joinRoom', joinRoom);
   socket.on('playerReady', getReady);
   socket.on('newGrid', sendGrid);
   socket.on('blockMoved', sendBlockPosition);
@@ -63,6 +64,20 @@ var sendRoomList = function(){
   this.emit('rooms', {rooms: listeRooms});
 };
 
+var nameChange = function(data){
+  console.log(data);
+  if(data.name != ''){
+    for(let player of Object.keys(players)){
+      //console.log(players[player].ready);
+      if(players[player].nick == data.name){
+        this.emit('nameChanged', {name: null, msg: 'Ce nom est déjà pris.'});
+        return;
+      }
+    }
+    players[this.id].nick = data.name;
+    this.emit('nameChanged', {name: data.name});
+  }
+}
 var createPlayer = function(){
 
 };

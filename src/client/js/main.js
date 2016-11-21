@@ -23,6 +23,12 @@ socket.on('newPlayer', function(data){
   }
 });
 
+socket.on('nameChanged', function(data){
+  if(!data.name){
+    lobby.error(data.msg);
+  }
+});
+
 socket.on('playerList', function(data){
   console.log('playerList');
   for(let i of data.list){
@@ -79,6 +85,15 @@ socket.on('weHaveAWinner', function(data){
 });
 
 gameZone.hide();
+
+window.document.querySelector('#lobby>form').onsubmit = function(event){
+  event.preventDefault();
+  let nom = window.document.querySelector('#name').value;
+  if(nom != ''){
+    socket.emit('nameChange', {name: nom});
+  }
+//  socket.emit()
+};
 
 window.document.querySelector('#creerPartie').onclick = function(){
   console.log('joinRoom');

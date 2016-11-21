@@ -7,6 +7,9 @@
 </head>
 <body>
 <div id="lobby">
+  <form action="">
+    <label for="nameForm">Nickname : </label><input id="name" autocomplete="off" placeholder="Enter your name here..."/><button>Send</button>
+  </form>
   <button id="refresh">Actualiser</button>
   Liste des parties en cours : 
   <div>
@@ -19,13 +22,15 @@
 </div>
 <div id="gameContainer">
   <div id="main">
-    <div>Score : <span class="score"></span></div>
+    <div class="nick"></div>
     <canvas class="maingame"></canvas>
+    <div>Score : <span class="score"></span></div>
     <div class="message"></div>
   </div>
   <div id="other">
-    <div>Score : <span class="score"></span></div>
+    <div class="nick"></div>
     <canvas class="maingame"></canvas>
+    <div>Score : <span class="score"></span></div>
   </div>
   <div id='instructions'>Use left and right arrows to move the block, W and X to rotate, down arrow to make the block fall faster and up arrow to drop the block.</div>
 </div>

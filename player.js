@@ -1,6 +1,6 @@
 var Player = function(id){
   this.id = id;
-  this.nick = 'Bob';
+  this.nick = null;
   this.room = null;
   this.ready = false;
   this.gameOver = false;
